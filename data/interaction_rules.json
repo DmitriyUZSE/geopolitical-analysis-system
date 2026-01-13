@@ -1,0 +1,576 @@
+{
+  "interaction_rules": {
+    "version": "1.0",
+    "description": "Формальные каузальные правила для автоматического расчёта каскадов",
+    
+    "economic_rules": [
+      {
+        "rule_id": "TRADE_ALLIANCE_DEPENDENCY",
+        "trigger": {
+          "parameter": "trade_integration_depth",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "alliance_dependency",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "condition": {
+              "actor_type": "advanced_economy"
+            },
+            "confidence_multiplier": 0.75,
+            "tier_delay": 1,
+            "mechanism": "Потеря торговых связей заставляет искать альтернативные источники критических товаров через союзы"
+          },
+          {
+            "target_parameter": "fiscal_resilience",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "condition": {
+              "export_dependence": ">0.3"
+            },
+            "confidence_multiplier": 0.70,
+            "tier_delay": 1,
+            "mechanism": "Экспортно-ориентированная экономика теряет валютные доходы"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "FISCAL_PRESSURE_POLICY_CAPACITY",
+        "trigger": {
+          "parameter": "fiscal_resilience",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "policy_implementation_capacity",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.65,
+            "tier_delay": 1,
+            "mechanism": "Фискальный кризис ограничивает способность государства реализовывать политику"
+          },
+          {
+            "target_parameter": "social_contract_strength",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.60,
+            "tier_delay": 2,
+            "mechanism": "Сокращение государственных расходов разрушает социальный контракт"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "ECONOMIC_DIVERSIFICATION_RESILIENCE",
+        "trigger": {
+          "parameter": "economic_diversification",
+          "change_direction": "increase",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "fiscal_resilience",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "confidence_multiplier": 0.70,
+            "tier_delay": 2,
+            "mechanism": "Диверсификация создаёт альтернативные источники доходов"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "TECH_CAPACITY_TRADE_LEVERAGE",
+        "trigger": {
+          "parameter": "technology_production_capacity",
+          "change_direction": "increase",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "resource_leverage_potential",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "condition": {
+              "tech_level": "very_high"
+            },
+            "confidence_multiplier": 0.80,
+            "tier_delay": 1,
+            "mechanism": "Технологическое лидерство создаёт зависимость других стран"
+          }
+        ]
+      }
+    ],
+    
+    "political_rules": [
+      {
+        "rule_id": "REGIME_LEGITIMACY_SOCIAL_CONTRACT",
+        "trigger": {
+          "parameter": "regime_legitimacy_basis",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "social_contract_strength",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.75,
+            "tier_delay": 1,
+            "mechanism": "Кризис легитимности подрывает доверие населения к власти"
+          },
+          {
+            "target_parameter": "elite_cohesion",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "probability": 0.60,
+            "confidence_multiplier": 0.55,
+            "tier_delay": 1,
+            "mechanism": "Ослабление режима провоцирует борьбу элитных фракций"
+          },
+          {
+            "target_parameter": "policy_implementation_capacity",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.65,
+            "tier_delay": 2,
+            "mechanism": "Нелегитимный режим сталкивается с сопротивлением бюрократии"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "ELITE_COHESION_STABILITY",
+        "trigger": {
+          "parameter": "elite_cohesion",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "institutional_stability",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.70,
+            "tier_delay": 1,
+            "mechanism": "Раскол элит дестабилизирует институты"
+          },
+          {
+            "target_parameter": "policy_implementation_capacity",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.65,
+            "tier_delay": 1,
+            "mechanism": "Элитные конфликты парализуют принятие решений"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "SOCIAL_CONTRACT_DOMESTIC_SECURITY",
+        "trigger": {
+          "parameter": "social_contract_strength",
+          "change_direction": "decrease",
+          "threshold": 2
+        },
+        "effects": [
+          {
+            "target_parameter": "domestic_security_control",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.60,
+            "tier_delay": 2,
+            "mechanism": "Разрыв социального контракта ведёт к протестам и нестабильности"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "INSTITUTIONAL_STABILITY_POLICY",
+        "trigger": {
+          "parameter": "institutional_stability",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "policy_implementation_capacity",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.75,
+            "tier_delay": 1,
+            "mechanism": "Нестабильные институты неспособны эффективно реализовывать политику"
+          }
+        ]
+      }
+    ],
+    
+    "security_rules": [
+      {
+        "rule_id": "MILITARY_BUILDUP_FISCAL_COST",
+        "trigger": {
+          "parameter": "military_capability_tier",
+          "change_direction": "increase",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "fiscal_resilience",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "condition": {
+              "defense_spending_ratio": ">0.03"
+            },
+            "confidence_multiplier": 0.75,
+            "tier_delay": 1,
+            "mechanism": "Милитаризация истощает бюджетные ресурсы"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "ALLIANCE_DEPENDENCY_AUTONOMY_TRADEOFF",
+        "trigger": {
+          "parameter": "alliance_dependency",
+          "change_direction": "increase",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "policy_implementation_capacity",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "condition": {
+              "alliance_type": "asymmetric"
+            },
+            "confidence_multiplier": 0.55,
+            "tier_delay": 1,
+            "mechanism": "Зависимость от союзников ограничивает автономию в принятии решений"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "DOMESTIC_SECURITY_CONTROL_REGIME",
+        "trigger": {
+          "parameter": "domestic_security_control",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "regime_legitimacy_basis",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.70,
+            "tier_delay": 1,
+            "mechanism": "Потеря контроля над территорией подрывает легитимность режима"
+          },
+          {
+            "target_parameter": "institutional_stability",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.65,
+            "tier_delay": 1,
+            "mechanism": "Внутренняя нестабильность угрожает институциональному порядку"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "STRATEGIC_DEPTH_MILITARY_CONFIDENCE",
+        "trigger": {
+          "parameter": "strategic_depth",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "alliance_dependency",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "confidence_multiplier": 0.70,
+            "tier_delay": 1,
+            "mechanism": "Отсутствие стратегической глубины требует внешних гарантий безопасности"
+          }
+        ]
+      }
+    ],
+    
+    "resource_rules": [
+      {
+        "rule_id": "ENERGY_AUTONOMY_LEVERAGE_INVERSE",
+        "trigger": {
+          "parameter": "energy_autonomy",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "alliance_dependency",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "confidence_multiplier": 0.80,
+            "tier_delay": 1,
+            "mechanism": "Энергетическая зависимость требует союзов для обеспечения поставок"
+          },
+          {
+            "target_parameter": "fiscal_resilience",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "condition": {
+              "energy_import_share": ">0.5"
+            },
+            "confidence_multiplier": 0.70,
+            "tier_delay": 1,
+            "mechanism": "Высокие затраты на импорт энергии истощают бюджет"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "RESOURCE_LEVERAGE_FISCAL_DEPENDENCY",
+        "trigger": {
+          "parameter": "resource_leverage_potential",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_parameter": "fiscal_resilience",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "condition": {
+              "resource_export_dependence": ">0.4"
+            },
+            "confidence_multiplier": 0.80,
+            "tier_delay": 1,
+            "mechanism": "Петрогосударства зависимы от ресурсной ренты для бюджета"
+          }
+        ]
+      }
+    ],
+    
+    "cross_actor_rules": [
+      {
+        "rule_id": "ALLIANCE_RECIPROCITY",
+        "trigger": {
+          "actor": "any",
+          "parameter": "alliance_dependency",
+          "change_direction": "increase",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_actors": "alliance_partners",
+            "target_parameter": "alliance_dependency",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "confidence_multiplier": 0.70,
+            "tier_delay": 1,
+            "mechanism": "Усиление альянса создаёт взаимную зависимость"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "TECH_COMPETITION_ARMS_RACE",
+        "trigger": {
+          "actor": "major_power",
+          "parameter": "technology_production_capacity",
+          "change_direction": "increase",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_actors": "peer_competitors",
+            "target_parameter": "technology_production_capacity",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "probability": 0.65,
+            "confidence_multiplier": 0.60,
+            "tier_delay": 2,
+            "mechanism": "Технологический прорыв конкурента провоцирует ответные инвестиции"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "MILITARY_BUILDUP_NEIGHBORS",
+        "trigger": {
+          "actor": "any",
+          "parameter": "military_capability_tier",
+          "change_direction": "increase",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_actors": "neighbors",
+            "target_parameter": "military_capability_tier",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "probability": 0.55,
+            "confidence_multiplier": 0.50,
+            "tier_delay": 2,
+            "mechanism": "Милитаризация соседа провоцирует оборонительные меры"
+          },
+          {
+            "target_actors": "neighbors",
+            "target_parameter": "alliance_dependency",
+            "effect_direction": "increase",
+            "magnitude": 1,
+            "confidence_multiplier": 0.65,
+            "tier_delay": 1,
+            "mechanism": "Угроза от соседа заставляет искать внешние гарантии"
+          }
+        ]
+      },
+      
+      {
+        "rule_id": "TRADE_INTEGRATION_SYMMETRIC",
+        "trigger": {
+          "actor": "any",
+          "parameter": "trade_integration_depth",
+          "change_direction": "decrease",
+          "threshold": 1
+        },
+        "effects": [
+          {
+            "target_actors": "major_trade_partners",
+            "target_parameter": "trade_integration_depth",
+            "effect_direction": "decrease",
+            "magnitude": 1,
+            "confidence_multiplier": 0.85,
+            "tier_delay": 0,
+            "mechanism": "Разрыв торговых связей симметричен - обе стороны теряют интеграцию"
+          }
+        ]
+      }
+    ],
+    
+    "feedback_loop_patterns": [
+      {
+        "loop_id": "SECURITY_DILEMMA",
+        "pattern": [
+          "Actor_A.military_capability_tier increases",
+          "Actor_B.military_capability_tier increases (response)",
+          "Actor_A.military_capability_tier increases further (counter-response)"
+        ],
+        "loop_type": "positive_feedback",
+        "systemic_risk": "high",
+        "description": "Классическая дилемма безопасности: действия одной стороны провоцируют ответ другой, создавая гонку вооружений"
+      },
+      
+      {
+        "loop_id": "FISCAL_DEATH_SPIRAL",
+        "pattern": [
+          "fiscal_resilience decreases",
+          "policy_implementation_capacity decreases",
+          "economic_diversification decreases",
+          "fiscal_resilience decreases further"
+        ],
+        "loop_type": "positive_feedback",
+        "systemic_risk": "very_high",
+        "description": "Фискальный кризис подрывает способность государства проводить реформы, что углубляет кризис"
+      },
+      
+      {
+        "loop_id": "LEGITIMACY_COLLAPSE",
+        "pattern": [
+          "regime_legitimacy_basis decreases",
+          "social_contract_strength decreases",
+          "domestic_security_control decreases",
+          "regime_legitimacy_basis decreases further"
+        ],
+        "loop_type": "positive_feedback",
+        "systemic_risk": "very_high",
+        "description": "Кризис легитимности ведёт к протестам, что ещё больше подрывает легитимность"
+      },
+      
+      {
+        "loop_id": "ALLIANCE_STRENGTHENING",
+        "pattern": [
+          "Actor_A.alliance_dependency increases",
+          "Actor_B.alliance_dependency increases (reciprocal)",
+          "Both actors deepen cooperation"
+        ],
+        "loop_type": "positive_feedback",
+        "systemic_risk": "low",
+        "description": "Углубление альянса может быть стабилизирующим фактором"
+      }
+    ],
+    
+    "actor_relationships": {
+      "alliances": {
+        "NATO": ["USA", "United_Kingdom", "France", "Germany"],
+        "US_BILATERAL": ["USA", "Japan", "South_Korea"],
+        "INFORMAL_ALIGNMENT": ["USA", "India"]
+      },
+      
+      "trade_partnerships": {
+        "US_major_partners": ["China", "Germany", "Japan", "South_Korea"],
+        "China_major_partners": ["USA", "Japan", "South_Korea", "Germany"],
+        "EU_internal": ["Germany", "France"]
+      },
+      
+      "neighbors": {
+        "China": ["Russia", "India", "Japan", "South_Korea"],
+        "Russia": ["China"],
+        "India": ["China"],
+        "Japan": ["China", "South_Korea"],
+        "South_Korea": ["China", "Japan"]
+      },
+      
+      "competitors": {
+        "peer_competitors": {
+          "USA": ["China", "Russia"],
+          "China": ["USA"],
+          "Russia": ["USA"]
+        }
+      }
+    },
+    
+    "actor_attributes": {
+      "USA": {
+        "economy_type": "advanced_economy",
+        "export_dependence": 0.12,
+        "defense_spending_ratio": 0.035,
+        "energy_import_share": 0.05,
+        "tech_level": "very_high"
+      },
+      "China": {
+        "economy_type": "emerging_market",
+        "export_dependence": 0.19,
+        "defense_spending_ratio": 0.019,
+        "energy_import_share": 0.70,
+        "tech_level": "high"
+      },
+      "Russia": {
+        "economy_type": "resource_exporter",
+        "export_dependence": 0.28,
+        "defense_spending_ratio": 0.045,
+        "resource_export_dependence": 0.60,
+        "energy_import_share": 0.0,
+        "tech_level": "medium"
+      },
+      "Germany": {
+        "economy_type": "advanced_economy",
+        "export_dependence": 0.47,
+        "defense_spending_ratio": 0.015,
+        "energy_import_share": 0.65,
+        "tech_level": "high"
+      },
+      "Japan": {
+        "economy_type": "advanced_economy",
+        "export_dependence": 0.18,
+        "defense_spending_ratio": 0.01,
+        "energy_import_share": 0.88,
+        "tech_level": "very_high"
+      }
+    }
+  }
+}
