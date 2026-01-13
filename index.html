@@ -3,259 +3,535 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geopolitical Analysis System - AI Powered</title>
+    <title>Geopolitical Analysis - Google Drive Integration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body{background:#f5f7fa;font-family:'Segoe UI',sans-serif}
         .card{box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-bottom:20px;border:none}
-        .parameter-row{padding:12px;margin:8px 0;border-radius:6px;background:white;border-left:4px solid #6c757d}
-        .parameter-row.very_low{border-left-color:#dc3545;background-color:#f8d7da}
-        .parameter-row.low{border-left-color:#fd7e14;background-color:#fff3cd}
-        .parameter-row.medium{border-left-color:#ffc107;background-color:#fff8e1}
-        .parameter-row.high{border-left-color:#28a745;background-color:#d4edda}
-        .parameter-row.very_high{border-left-color:#0d6efd;background-color:#cfe2ff}
-        .cascade-effect{background:#f0f8ff;border-left:3px solid #0d6efd;padding:15px;margin:10px 0;border-radius:6px}
-        .tier-badge{display:inline-block;padding:4px 10px;border-radius:12px;font-size:0.8em;font-weight:bold;margin-right:8px;color:white}
-        .tier-1{background:#0d6efd}.tier-2{background:#198754}.tier-3{background:#ffc107;color:#000}.tier-4{background:#dc3545}
-        .confidence-bar{height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;margin-top:5px}
-        .confidence-fill{height:100%;background:linear-gradient(90deg,#dc3545,#ffc107,#28a745)}
-        .feedback-loop{background:#fff3cd;border:2px dashed #ffc107;padding:15px;border-radius:8px;margin:15px 0}
-        .scenario-builder{background:white;padding:25px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
-        .action-item{background:#f8f9fa;padding:15px;margin:10px 0;border-radius:8px;border:1px solid #dee2e6}
-        .btn-generate{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border:none;color:white;padding:12px 30px;font-weight:bold}
-        .btn-ai{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);border:none;color:white;padding:10px 25px;font-weight:bold}
-        .ai-analysis-box{background:#f0f8ff;border:2px solid #0d6efd;padding:20px;border-radius:10px;margin:20px 0}
-        .document-item{background:white;padding:15px;margin:10px 0;border-radius:8px;border:1px solid #dee2e6;cursor:pointer}
-        .document-item:hover{border-color:#0d6efd;box-shadow:0 2px 8px rgba(13,110,253,0.2)}
-        .spinner{border:4px solid #f3f3f3;border-top:4px solid #667eea;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:20px auto}
+        .btn-google{background:#4285f4;color:white;border:none;padding:10px 20px;border-radius:5px}
+        .btn-google:hover{background:#357ae8;color:white}
+        .status-box{padding:15px;border-radius:8px;margin:15px 0}
+        .status-success{background:#d4edda;border:1px solid #c3e6cb}
+        .status-error{background:#f8d7da;border:1px solid #f5c6cb}
+        .status-info{background:#d1ecf1;border:1px solid #bee5eb}
+        .doc-item{background:white;padding:15px;margin:10px 0;border-radius:8px;border:1px solid #dee2e6;transition:all 0.3s}
+        .doc-item:hover{border-color:#0d6efd;box-shadow:0 2px 8px rgba(13,110,253,0.2)}
+        .spinner{border:4px solid #f3f3f3;border-top:4px solid #4285f4;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:20px auto}
         @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        .config-section{background:#f8f9fa;padding:20px;border-radius:10px;margin:20px 0}
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">🧠 AI-Powered Geopolitical Analysis</a>
-            <div class="navbar-nav">
-                <a class="nav-link active" href="#" onclick="showPage('baseline')">Baseline</a>
-                <a class="nav-link" href="#" onclick="showPage('documents')">📚 Documents</a>
-                <a class="nav-link" href="#" onclick="showPage('builder')">🤖 AI Builder</a>
-                <a class="nav-link" href="#" onclick="showPage('cascade')">Cascade</a>
-                <a class="nav-link" href="#" onclick="showPage('settings')">⚙️ Settings</a>
-            </div>
+            <span class="navbar-brand">📁 Google Drive Document System</span>
+            <div id="auth-status"></div>
         </div>
     </nav>
 
-    <div class="container-fluid mt-4">
-        <!-- Settings Page -->
-        <div id="settings-page" style="display:none;">
-            <h2>Settings</h2>
-            <div class="card">
-                <div class="card-header"><h5>🔑 Claude API Configuration</h5></div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        <strong>Нужен API ключ:</strong> Получи на <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Step 1: Configuration -->
+                <div class="card" id="config-card">
+                    <div class="card-header bg-primary text-white">
+                        <h5>⚙️ Step 1: Configure Google Drive API</h5>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">API Key:</label>
-                        <input type="password" id="api-key-input" class="form-control" placeholder="sk-ant-...">
-                        <small class="text-muted">Ключ хранится только в браузере (localStorage)</small>
-                    </div>
-                    <button class="btn btn-primary" onclick="saveAPIKey()">💾 Save API Key</button>
-                    <button class="btn btn-success" onclick="testAPI()">✅ Test Connection</button>
-                    <div id="api-status" class="mt-3"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Documents Page -->
-        <div id="documents-page" style="display:none;">
-            <h2>📚 Knowledge Base</h2>
-            <p class="text-muted">Загружай докладные записки, отчёты, аналитику - AI будет использовать их для анализа</p>
-            
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Add Document</h5>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <strong>📋 Instructions:</strong>
+                            <ol class="mb-0">
+                                <li>Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                                <li>Create a new project</li>
+                                <li>Enable "Google Drive API" and "Google Picker API"</li>
+                                <li>Create OAuth 2.0 Client ID and API Key</li>
+                                <li>Paste them below</li>
+                            </ol>
                         </div>
-                        <div class="card-body">
+
+                        <div class="config-section">
                             <div class="mb-3">
-                                <label class="form-label">Title:</label>
-                                <input type="text" id="doc-title" class="form-control" placeholder="e.g., US-China Trade War Analysis 2024">
+                                <label class="form-label"><strong>Google Client ID:</strong></label>
+                                <input type="text" id="client-id" class="form-control" placeholder="xxxxx.apps.googleusercontent.com">
+                                <small class="text-muted">From OAuth 2.0 Client credentials</small>
                             </div>
+
                             <div class="mb-3">
-                                <label class="form-label">Content:</label>
-                                <textarea id="doc-content" class="form-control" rows="8" placeholder="Paste your analytical document here..."></textarea>
+                                <label class="form-label"><strong>Google API Key:</strong></label>
+                                <input type="text" id="api-key" class="form-control" placeholder="AIzaSy...">
+                                <small class="text-muted">From API Keys section</small>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Type:</label>
-                                    <select id="doc-type" class="form-select">
-                                        <option value="report">Report</option>
-                                        <option value="memo">Memo</option>
-                                        <option value="analysis">Analysis</option>
-                                        <option value="news">News</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Actors (comma-separated):</label>
-                                    <input type="text" id="doc-actors" class="form-control" placeholder="USA, China, Russia">
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" onclick="addDocument()">➕ Add to Knowledge Base</button>
+
+                            <button class="btn btn-primary" onclick="saveConfig()">💾 Save Configuration</button>
+                            <button class="btn btn-success" onclick="testConnection()">✅ Test Connection</button>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header"><h5>📊 Statistics</h5></div>
-                        <div class="card-body" id="doc-stats"></div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5>Stored Documents (<span id="doc-count">0</span>)</h5>
-                </div>
-                <div class="card-body">
-                    <div id="documents-list"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AI Builder Page -->
-        <div id="builder-page" style="display:none;">
-            <h2>🤖 AI-Powered Scenario Builder</h2>
-            <p class="text-muted">Опиши сценарий на естественном языке - AI проанализирует и предложит изменения</p>
-            
-            <div class="scenario-builder">
-                <div class="mb-3">
-                    <label class="form-label"><strong>Scenario Name</strong></label>
-                    <input type="text" id="scenario-name" class="form-control" placeholder="e.g., US Tariffs on Chinese Electronics 2026">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label"><strong>Scenario Description</strong></label>
-                    <textarea id="scenario-description" class="form-control" rows="6" placeholder="Опиши сценарий детально:
-- Кто действует? (Actor)
-- Что делает? (Action)
-- На кого направлено? (Target)
-- Детали: % тарифов, товары, срок, условия...
-
-Пример:
-США вводит 25% тарифы на китайскую электронику (смартфоны, компьютеры, полупроводники) сроком на 2 года. Исключения для медицинского оборудования. Если Китай снизит субсидии производителям на 50%, тарифы будут отменены досрочно."></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label"><strong>Key Actors</strong></label>
-                    <input type="text" id="scenario-actors" class="form-control" placeholder="USA, China" value="USA, China">
-                    <small class="text-muted">AI will search relevant documents for these actors</small>
-                </div>
-
-                <div class="text-center mb-3">
-                    <button class="btn btn-ai btn-lg" onclick="analyzeWithAI()">
-                        🤖 Analyze with AI Brain
-                    </button>
-                </div>
-
-                <div id="ai-thinking" style="display:none;">
-                    <div class="ai-analysis-box">
-                        <div class="text-center">
-                            <div class="spinner"></div>
-                            <p><strong>AI analyzing scenario...</strong></p>
-                            <p class="text-muted">Searching knowledge base → Reading documents → Reasoning → Predicting effects</p>
-                        </div>
+                        <div id="config-status"></div>
                     </div>
                 </div>
 
-                <div id="ai-results" style="display:none;"></div>
-
-                <div id="manual-overrides" style="display:none;">
-                    <h5 class="mt-4">Manual Adjustments (Optional)</h5>
-                    <p class="text-muted small">AI предложил изменения выше. Можешь скорректировать или добавить свои:</p>
-                    <div id="overrides-container"></div>
-                    <button class="btn btn-secondary btn-sm mt-2" onclick="addOverride()">+ Add Manual Override</button>
-                </div>
-
-                <div id="generate-section" style="display:none;">
-                    <div class="mt-4 text-center">
-                        <button class="btn btn-generate btn-lg" onclick="generateScenarioFromAI()">
-                            🚀 Generate Full Cascade Analysis
+                <!-- Step 2: Authentication -->
+                <div class="card" id="auth-card" style="display:none;">
+                    <div class="card-header bg-success text-white">
+                        <h5>🔐 Step 2: Sign in to Google</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>Configuration saved! Now sign in to your Google account.</p>
+                        <button class="btn btn-google btn-lg" onclick="signInToGoogle()">
+                            <img src="https://www.gstatic.com/images/branding/product/1x/googleg_18dp.png" style="margin-right:10px">
+                            Sign in with Google
                         </button>
+                        <div id="auth-result" class="mt-3"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Select Folder -->
+                <div class="card" id="folder-card" style="display:none;">
+                    <div class="card-header bg-warning">
+                        <h5>📂 Step 3: Select Document Folder</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Choose the Google Drive folder containing your analytical documents (.docx, .pdf, .txt)</p>
+                        <button class="btn btn-primary btn-lg" onclick="selectFolder()">
+                            📁 Select Folder from Google Drive
+                        </button>
+                        <div id="folder-status" class="mt-3"></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Index Documents -->
+                <div class="card" id="index-card" style="display:none;">
+                    <div class="card-header bg-info text-white">
+                        <h5>🔍 Step 4: Index Documents</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Selected Folder:</strong> <span id="selected-folder-name">-</span></p>
+                        <button class="btn btn-success btn-lg" onclick="indexDocuments()">
+                            🚀 Start Indexing
+                        </button>
+                        <button class="btn btn-secondary" onclick="changeFolder()">
+                            📁 Change Folder
+                        </button>
+                        
+                        <div id="indexing-progress" style="display:none;">
+                            <div class="status-box status-info mt-3">
+                                <div class="spinner"></div>
+                                <p class="text-center mt-3">
+                                    <strong>Indexing documents...</strong><br>
+                                    <span id="progress-text">Scanning folder structure...</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div id="indexing-result"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Document Library -->
+                <div class="card" id="library-card" style="display:none;">
+                    <div class="card-header bg-success text-white">
+                        <h5>✅ Document Library</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6>📊 Statistics:</h6>
+                                <p class="mb-0">
+                                    <strong>Total Documents:</strong> <span id="stats-total">0</span><br>
+                                    <strong>Total Size:</strong> <span id="stats-size">0</span> MB<br>
+                                    <strong>Last Indexed:</strong> <span id="stats-date">-</span>
+                                </p>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" onclick="resyncDocuments()">🔄 Re-sync</button>
+                                <button class="btn btn-success" onclick="exportIndex()">📥 Export Index</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" id="search-docs" class="form-control" placeholder="🔍 Search documents..." onkeyup="searchDocuments()">
+                        </div>
+
+                        <div id="documents-list"></div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Baseline, Cascade, Comparison pages (same as before) -->
-        <div id="baseline-page">
-            <h2>Baseline Explorer</h2>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <select id="actor-select" class="form-select" onchange="displayActorParams()">
-                        <option value="">-- Select Actor --</option>
-                    </select>
-                </div>
-            </div>
-            <div id="parameter-display"></div>
-        </div>
-
-        <div id="cascade-page" style="display:none;">
-            <h2>Cascade Viewer</h2>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <select id="scenario-select" class="form-select" onchange="displayCascade()">
-                        <option value="">-- Select Scenario --</option>
-                    </select>
-                </div>
-            </div>
-            <div id="cascade-display"></div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/document-manager.js"></script>
-    <script src="js/ai-analysis.js"></script>
+    <!-- Load Google APIs -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    
     <script>
-// Continue with baseline data and core functions...
-const BASELINE_DATA={"USA":{"economic_diversification":"very_high","fiscal_resilience":"medium","trade_integration_depth":"high","technology_production_capacity":"very_high","energy_autonomy":"high","institutional_stability":"high","regime_legitimacy_basis":"high","policy_implementation_capacity":"high","elite_cohesion":"medium","social_contract_strength":"medium","military_capability_tier":"very_high","alliance_dependency":"low","strategic_depth":"very_high","domestic_security_control":"high","cyber_defensive_capacity":"very_high","resource_leverage_potential":"high","financial_system_centrality":"very_high","infrastructure_connectivity":"very_high","demographic_pressure":"low","ideological_mobilization_capacity":"medium"},"China":{"economic_diversification":"high","fiscal_resilience":"high","trade_integration_depth":"very_high","technology_production_capacity":"high","energy_autonomy":"low","institutional_stability":"high","regime_legitimacy_basis":"medium","policy_implementation_capacity":"very_high","elite_cohesion":"high","social_contract_strength":"medium","military_capability_tier":"high","alliance_dependency":"low","strategic_depth":"very_high","domestic_security_control":"very_high","cyber_defensive_capacity":"high","resource_leverage_potential":"high","financial_system_centrality":"medium","infrastructure_connectivity":"very_high","demographic_pressure":"high","ideological_mobilization_capacity":"high"},"Russia":{"economic_diversification":"low","fiscal_resilience":"medium","trade_integration_depth":"medium","technology_production_capacity":"medium","energy_autonomy":"very_high","institutional_stability":"medium","regime_legitimacy_basis":"medium","policy_implementation_capacity":"medium","elite_cohesion":"high","social_contract_strength":"low","military_capability_tier":"high","alliance_dependency":"very_low","strategic_depth":"very_high","domestic_security_control":"high","cyber_defensive_capacity":"high","resource_leverage_potential":"very_high","financial_system_centrality":"low","infrastructure_connectivity":"medium","demographic_pressure":"medium","ideological_mobilization_capacity":"medium"}};
-const PARAM_NAMES={"economic_diversification":"Economic Diversification","fiscal_resilience":"Fiscal Resilience","trade_integration_depth":"Trade Integration","technology_production_capacity":"Tech Production","energy_autonomy":"Energy Autonomy","institutional_stability":"Institutional Stability","regime_legitimacy_basis":"Regime Legitimacy","policy_implementation_capacity":"Policy Capacity","elite_cohesion":"Elite Cohesion","social_contract_strength":"Social Contract","military_capability_tier":"Military Capability","alliance_dependency":"Alliance Dependency","strategic_depth":"Strategic Depth","domestic_security_control":"Domestic Security","cyber_defensive_capacity":"Cyber Defense","resource_leverage_potential":"Resource Leverage","financial_system_centrality":"Financial Centrality","infrastructure_connectivity":"Infrastructure","demographic_pressure":"Demographics","ideological_mobilization_capacity":"Ideological Mobilization"};
-let SCENARIO_LIBRARY={};let overrideCounter=0;let currentAIAnalysis=null;
+        let CLIENT_ID = '';
+        let API_KEY = '';
+        let FOLDER_ID = '';
+        let FOLDER_NAME = '';
+        let documents = [];
+        let isSignedIn = false;
 
-// Simple cascade engine
-class CascadeEngine{constructor(){this.scale=["very_low","low","medium","high","very_high"];this.rules={trade_integration_depth_decrease:[{param:"alliance_dependency",effect:"increase",mag:1,conf:0.75,logic:"Loss of trade requires alliances"}],fiscal_resilience_decrease:[{param:"policy_implementation_capacity",effect:"decrease",mag:1,conf:0.65,logic:"Fiscal crisis limits capacity"}]}}computeCascade(s,b){const r={tier1:[],tier2:[],tier3:[],tier4:[]};const st=JSON.parse(JSON.stringify(b));if(s.overrides){Object.keys(s.overrides).forEach(a=>{Object.keys(s.overrides[a]).forEach(p=>{const o=s.overrides[a][p];r.tier1.push({actor:a,parameter:p,baseline:b[a][p],new_value:o,confidence:0.85,mechanism:"Direct override",tier:1});st[a][p]=o})})}return r}getDirection(f,t){const fi=this.scale.indexOf(f);const ti=this.scale.indexOf(t);return ti>fi?"increase":"decrease"}shift(c,d,m){const i=this.scale.indexOf(c);const ni=d==="increase"?Math.min(i+m,this.scale.length-1):Math.max(i-m,0);return this.scale[ni]}}
-const engine=new CascadeEngine();
+        // Load saved config
+        function loadConfig() {
+            CLIENT_ID = localStorage.getItem('google_client_id') || '';
+            API_KEY = localStorage.getItem('google_api_key') || '';
+            FOLDER_ID = localStorage.getItem('gdrive_folder_id') || '';
+            FOLDER_NAME = localStorage.getItem('gdrive_folder_name') || '';
 
-window.onload=function(){Object.keys(BASELINE_DATA).forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a.replace('_',' ');document.getElementById('actor-select').appendChild(o)});loadAPIKey();refreshDocuments();updateDocStats()};
+            if (CLIENT_ID && API_KEY) {
+                document.getElementById('client-id').value = CLIENT_ID;
+                document.getElementById('api-key').value = API_KEY;
+            }
+        }
 
-function showPage(p){document.querySelectorAll('[id$="-page"]').forEach(pg=>pg.style.display='none');document.getElementById(p+'-page').style.display='block';document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));event.target.classList.add('active');if(p==='documents')refreshDocuments()}
+        function saveConfig() {
+            CLIENT_ID = document.getElementById('client-id').value.trim();
+            API_KEY = document.getElementById('api-key').value.trim();
 
-// API KEY MANAGEMENT
-function saveAPIKey(){const key=document.getElementById('api-key-input').value.trim();if(!key){alert('Enter API key');return}localStorage.setItem('claude_api_key',key);initAIEngine(key);document.getElementById('api-status').innerHTML='<div class="alert alert-success">✅ API Key saved!</div>';setTimeout(()=>document.getElementById('api-status').innerHTML='',3000)}
+            if (!CLIENT_ID || !API_KEY) {
+                showStatus('config-status', 'Please enter both Client ID and API Key', 'error');
+                return;
+            }
 
-function loadAPIKey(){const key=localStorage.getItem('claude_api_key');if(key){document.getElementById('api-key-input').value=key;initAIEngine(key)}}
+            localStorage.setItem('google_client_id', CLIENT_ID);
+            localStorage.setItem('google_api_key', API_KEY);
+            
+            showStatus('config-status', '✅ Configuration saved! Now test the connection.', 'success');
+        }
 
-async function testAPI(){const key=localStorage.getItem('claude_api_key');if(!key){document.getElementById('api-status').innerHTML='<div class="alert alert-warning">No API key</div>';return}document.getElementById('api-status').innerHTML='<div class="spinner"></div>';try{const test=await aiEngine.quickAnalyze('test','USA','China','Test connection');document.getElementById('api-status').innerHTML='<div class="alert alert-success">✅ Connection successful!</div>'}catch(e){document.getElementById('api-status').innerHTML=`<div class="alert alert-danger">❌ Error: ${e.message}</div>`}}
+        function testConnection() {
+            if (!CLIENT_ID || !API_KEY) {
+                showStatus('config-status', '❌ Please save configuration first', 'error');
+                return;
+            }
 
-// DOCUMENT MANAGEMENT
-function addDocument(){const title=document.getElementById('doc-title').value;const content=document.getElementById('doc-content').value;const type=document.getElementById('doc-type').value;const actors=document.getElementById('doc-actors').value.split(',').map(a=>a.trim());if(!title||!content){alert('Fill title and content');return}docManager.addDocument({title,content,type,actors});document.getElementById('doc-title').value='';document.getElementById('doc-content').value='';document.getElementById('doc-actors').value='';refreshDocuments();updateDocStats();alert('✅ Document added!')}
+            showStatus('config-status', '🔄 Testing connection...', 'info');
 
-function refreshDocuments(){const docs=docManager.getAllDocuments();const list=document.getElementById('documents-list');document.getElementById('doc-count').textContent=docs.length;if(docs.length===0){list.innerHTML='<p class="text-muted">No documents yet. Add your first analytical document above.</p>';return}list.innerHTML='';docs.forEach(doc=>{const div=document.createElement('div');div.className='document-item';div.innerHTML=`<div><strong>${doc.title}</strong> <span class="badge bg-info">${doc.type}</span></div><small class="text-muted">${new Date(doc.date).toLocaleDateString()} | Actors: ${doc.actors.join(', ')}</small><p class="mt-2 mb-0">${doc.content.substring(0,200)}...</p>`;list.appendChild(div)})}
+            gapi.load('client:auth2', async () => {
+                try {
+                    await gapi.client.init({
+                        apiKey: API_KEY,
+                        clientId: CLIENT_ID,
+                        discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+                        scope: 'https://www.googleapis.com/auth/drive.readonly'
+                    });
 
-function updateDocStats(){const stats=docManager.getStats();document.getElementById('doc-stats').innerHTML=`<p><strong>Total:</strong> ${stats.total}</p><p><strong>Recent (30d):</strong> ${stats.recent}</p><p><strong>By Type:</strong><br>${Object.entries(stats.byType).map(([k,v])=>`${k}: ${v}`).join('<br>')}</p>`}
+                    showStatus('config-status', '✅ Connection successful! You can now sign in.', 'success');
+                    document.getElementById('config-card').style.display = 'none';
+                    document.getElementById('auth-card').style.display = 'block';
 
-// AI ANALYSIS
-async function analyzeWithAI(){const desc=document.getElementById('scenario-description').value;const actorStr=document.getElementById('scenario-actors').value;if(!desc){alert('Enter scenario description');return}if(!aiEngine){alert('Configure API key in Settings first!');showPage('settings');return}const actors=actorStr.split(',').map(a=>a.trim());document.getElementById('ai-thinking').style.display='block';document.getElementById('ai-results').style.display='none';try{const result=await aiEngine.analyzeScenario(desc,actors,BASELINE_DATA);document.getElementById('ai-thinking').style.display='none';if(!result.success){document.getElementById('ai-results').innerHTML=`<div class="alert alert-danger">❌ Analysis failed: ${result.error}</div>`;document.getElementById('ai-results').style.display='block';return}currentAIAnalysis=result.analysis;displayAIResults(result)}catch(e){document.getElementById('ai-thinking').style.display='none';document.getElementById('ai-results').innerHTML=`<div class="alert alert-danger">❌ Error: ${e.message}</div>`;document.getElementById('ai-results').style.display='block'}}
+                } catch (error) {
+                    showStatus('config-status', `❌ Connection failed: ${error.message}`, 'error');
+                }
+            });
+        }
 
-function displayAIResults(result){const analysis=result.analysis;let html='<div class="ai-analysis-box"><h4>🧠 AI Analysis Results</h4>';html+=`<p><strong>Documents Used:</strong> ${result.documentsUsed}</p>`;html+=`<p><strong>Confidence:</strong> ${(result.confidence*100).toFixed(0)}%</p>`;html+=`<div class="mt-3"><strong>Summary:</strong><p>${analysis.summary||'Analysis complete'}</p></div>`;if(analysis.direct_effects&&analysis.direct_effects.length>0){html+='<h5 class="mt-4">Predicted Parameter Changes:</h5>';analysis.direct_effects.forEach(e=>{html+=`<div class="cascade-effect"><strong>${e.actor}</strong> → ${PARAM_NAMES[e.parameter]||e.parameter}<br><span class="badge bg-secondary">${e.current}</span> → <span class="badge bg-warning">${e.new}</span><div class="confidence-bar"><div class="confidence-fill" style="width:${(e.confidence||0.5)*100}%"></div></div><small><strong>Reasoning:</strong> ${e.reasoning}</small></div>`})}html+='</div>';document.getElementById('ai-results').innerHTML=html;document.getElementById('ai-results').style.display='block';document.getElementById('manual-overrides').style.display='block';document.getElementById('generate-section').style.display='block'}
+        function signInToGoogle() {
+            gapi.auth2.getAuthInstance().signIn().then(() => {
+                isSignedIn = true;
+                const user = gapi.auth2.getAuthInstance().currentUser.get();
+                const profile = user.getBasicProfile();
+                
+                showStatus('auth-result', `✅ Signed in as: ${profile.getEmail()}`, 'success');
+                document.getElementById('auth-status').innerHTML = `<span class="text-white">👤 ${profile.getName()}</span>`;
+                
+                setTimeout(() => {
+                    document.getElementById('auth-card').style.display = 'none';
+                    document.getElementById('folder-card').style.display = 'block';
 
-function generateScenarioFromAI(){if(!currentAIAnalysis){alert('Run AI analysis first');return}const name=document.getElementById('scenario-name').value||'AI Generated Scenario';const desc=document.getElementById('scenario-description').value;const overrides={};if(currentAIAnalysis.direct_effects){currentAIAnalysis.direct_effects.forEach(e=>{if(!overrides[e.actor])overrides[e.actor]={};overrides[e.actor][e.parameter]=e.new})}const s={id:name.replace(/\s+/g,'_').toUpperCase(),name,description:desc,overrides,aiGenerated:true,aiAnalysis:currentAIAnalysis};const casc=engine.computeCascade(s,BASELINE_DATA);s.cascade=casc;SCENARIO_LIBRARY[s.id]=s;const sel=document.getElementById('scenario-select');const opt=document.createElement('option');opt.value=s.id;opt.textContent=s.name;sel.appendChild(opt);alert('✅ Scenario generated with AI analysis!');showPage('cascade');sel.value=s.id;displayCascade()}
+                    if (FOLDER_ID) {
+                        document.getElementById('selected-folder-name').textContent = FOLDER_NAME || FOLDER_ID;
+                        document.getElementById('folder-card').style.display = 'none';
+                        document.getElementById('index-card').style.display = 'block';
+                    }
+                }, 1500);
+            }).catch(error => {
+                showStatus('auth-result', `❌ Sign in failed: ${error.error}`, 'error');
+            });
+        }
 
-function displayActorParams(){const a=document.getElementById('actor-select').value;const d=document.getElementById('parameter-display');if(!a){d.innerHTML='<p class="text-muted">Select actor</p>';return}const p=BASELINE_DATA[a];let h='<div class="row">';Object.keys(p).forEach(k=>{const v=p[k];h+=`<div class="col-md-6"><div class="parameter-row ${v}"><strong>${PARAM_NAMES[k]}</strong><span class="badge bg-secondary float-end">${v.replace('_',' ').toUpperCase()}</span></div></div>`});h+='</div>';d.innerHTML=h}
+        function selectFolder() {
+            const picker = new google.picker.PickerBuilder()
+                .addView(google.picker.ViewId.FOLDERS)
+                .setOAuthToken(gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token)
+                .setDeveloperKey(API_KEY)
+                .setCallback(pickerCallback)
+                .build();
+            picker.setVisible(true);
+        }
 
-function displayCascade(){const id=document.getElementById('scenario-select').value;const d=document.getElementById('cascade-display');if(!id||!SCENARIO_LIBRARY[id]){d.innerHTML='<p class="text-muted">Select scenario</p>';return}const s=SCENARIO_LIBRARY[id];const c=s.cascade;let h=`<div class="card"><div class="card-header bg-primary text-white"><h5>${s.name}</h5><p class="mb-0">${s.description}</p>${s.aiGenerated?'<span class="badge bg-light text-dark mt-2">🤖 AI Generated</span>':''}</div></div>`;h+='<div class="card"><div class="card-header"><h5><span class="tier-badge tier-1">TIER 1</span>Direct</h5></div><div class="card-body">';if(c.tier1.length===0)h+='<p>No changes</p>';else c.tier1.forEach(e=>{h+=`<div class="cascade-effect"><strong>${e.actor}</strong> → ${PARAM_NAMES[e.parameter]}<br><span class="badge bg-secondary">${e.baseline}</span> → <span class="badge bg-warning">${e.new_value}</span></div>`});h+='</div></div>';d.innerHTML=h}
+        function pickerCallback(data) {
+            if (data.action === google.picker.Action.PICKED) {
+                FOLDER_ID = data.docs[0].id;
+                FOLDER_NAME = data.docs[0].name;
+                
+                localStorage.setItem('gdrive_folder_id', FOLDER_ID);
+                localStorage.setItem('gdrive_folder_name', FOLDER_NAME);
+                
+                document.getElementById('selected-folder-name').textContent = FOLDER_NAME;
+                showStatus('folder-status', `✅ Selected: ${FOLDER_NAME}`, 'success');
+                
+                setTimeout(() => {
+                    document.getElementById('folder-card').style.display = 'none';
+                    document.getElementById('index-card').style.display = 'block';
+                }, 1000);
+            }
+        }
 
-function addOverride(){}
+        function changeFolder() {
+            document.getElementById('index-card').style.display = 'none';
+            document.getElementById('folder-card').style.display = 'block';
+        }
+
+        async function indexDocuments() {
+            document.getElementById('indexing-progress').style.display = 'block';
+            document.getElementById('indexing-result').innerHTML = '';
+
+            try {
+                updateProgress('Scanning folder structure...');
+                const files = await scanFolder(FOLDER_ID);
+                
+                updateProgress(`Found ${files.length} documents. Extracting text...`);
+                
+                documents = [];
+                for (let i = 0; i < files.length; i++) {
+                    updateProgress(`Processing ${i + 1}/${files.length}: ${files[i].name}`);
+                    const doc = await processFile(files[i]);
+                    if (doc) documents.push(doc);
+                }
+
+                // Save to IndexedDB
+                await saveToIndexedDB(documents);
+
+                document.getElementById('indexing-progress').style.display = 'none';
+                showStatus('indexing-result', `✅ Successfully indexed ${documents.length} documents!`, 'success');
+
+                setTimeout(() => {
+                    document.getElementById('index-card').style.display = 'none';
+                    document.getElementById('library-card').style.display = 'block';
+                    displayDocuments();
+                    updateStats();
+                }, 2000);
+
+            } catch (error) {
+                document.getElementById('indexing-progress').style.display = 'none';
+                showStatus('indexing-result', `❌ Indexing failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function scanFolder(folderId, allFiles = []) {
+            const response = await gapi.client.drive.files.list({
+                q: `'${folderId}' in parents and trashed=false`,
+                fields: 'files(id, name, mimeType, modifiedTime, size)',
+                pageSize: 100
+            });
+
+            const files = response.result.files;
+
+            for (const file of files) {
+                if (file.mimeType === 'application/vnd.google-apps.folder') {
+                    await scanFolder(file.id, allFiles);
+                } else if (isSupportedFile(file.mimeType)) {
+                    allFiles.push(file);
+                }
+            }
+
+            return allFiles;
+        }
+
+        function isSupportedFile(mimeType) {
+            return [
+                'application/vnd.google-apps.document',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/msword',
+                'text/plain'
+            ].includes(mimeType);
+        }
+
+        async function processFile(file) {
+            try {
+                let text = '';
+
+                if (file.mimeType === 'application/vnd.google-apps.document') {
+                    const response = await gapi.client.drive.files.export({
+                        fileId: file.id,
+                        mimeType: 'text/plain'
+                    });
+                    text = response.body;
+                } else if (file.mimeType.includes('word')) {
+                    const response = await fetch(
+                        `https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token}`
+                            }
+                        }
+                    );
+                    const blob = await response.blob();
+                    const arrayBuffer = await blob.arrayBuffer();
+                    const result = await mammoth.extractRawText({ arrayBuffer });
+                    text = result.value;
+                } else {
+                    const response = await fetch(
+                        `https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token}`
+                            }
+                        }
+                    );
+                    text = await response.text();
+                }
+
+                return {
+                    id: file.id,
+                    title: file.name,
+                    content: text,
+                    size: file.size || 0,
+                    modified: file.modifiedTime,
+                    indexed: new Date().toISOString(),
+                    wordCount: text.split(/\s+/).length
+                };
+
+            } catch (error) {
+                console.error(`Error processing ${file.name}:`, error);
+                return null;
+            }
+        }
+
+        async function saveToIndexedDB(docs) {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('GeopoliticalDocs', 1);
+                
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('documents')) {
+                        db.createObjectStore('documents', { keyPath: 'id' });
+                    }
+                };
+
+                request.onsuccess = (e) => {
+                    const db = e.target.result;
+                    const tx = db.transaction(['documents'], 'readwrite');
+                    const store = tx.objectStore('documents');
+                    
+                    docs.forEach(doc => store.put(doc));
+                    tx.oncomplete = () => resolve();
+                };
+
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function loadFromIndexedDB() {
+            return new Promise((resolve) => {
+                const request = indexedDB.open('GeopoliticalDocs', 1);
+                request.onsuccess = (e) => {
+                    const db = e.target.result;
+                    const tx = db.transaction(['documents'], 'readonly');
+                    const store = tx.objectStore('documents');
+                    const getAll = store.getAll();
+                    getAll.onsuccess = () => resolve(getAll.result);
+                };
+            });
+        }
+
+        function displayDocuments() {
+            const list = document.getElementById('documents-list');
+            list.innerHTML = '';
+
+            documents.forEach(doc => {
+                const div = document.createElement('div');
+                div.className = 'doc-item';
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <strong>${doc.title}</strong>
+                            <br><small class="text-muted">${doc.wordCount} words | Modified: ${new Date(doc.modified).toLocaleDateString()}</small>
+                        </div>
+                        <div>
+                            <span class="badge bg-info">${(doc.size / 1024).toFixed(1)} KB</span>
+                        </div>
+                    </div>
+                    <p class="mt-2 mb-0 small">${doc.content.substring(0, 200)}...</p>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function searchDocuments() {
+            const query = document.getElementById('search-docs').value.toLowerCase();
+            const filtered = documents.filter(doc => 
+                doc.title.toLowerCase().includes(query) || 
+                doc.content.toLowerCase().includes(query)
+            );
+            
+            const list = document.getElementById('documents-list');
+            list.innerHTML = '';
+            filtered.forEach(doc => {
+                const div = document.createElement('div');
+                div.className = 'doc-item';
+                div.innerHTML = `<strong>${doc.title}</strong><br><small>${doc.wordCount} words</small>`;
+                list.appendChild(div);
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('stats-total').textContent = documents.length;
+            document.getElementById('stats-size').textContent = (documents.reduce((sum, d) => sum + d.size, 0) / 1024 / 1024).toFixed(2);
+            document.getElementById('stats-date').textContent = new Date().toLocaleString();
+        }
+
+        function updateProgress(text) {
+            document.getElementById('progress-text').textContent = text;
+        }
+
+        function showStatus(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = `<div class="status-box status-${type}">${message}</div>`;
+        }
+
+        async function resyncDocuments() {
+            if (confirm('Re-index all documents? This may take a few minutes.')) {
+                document.getElementById('library-card').style.display = 'none';
+                document.getElementById('index-card').style.display = 'block';
+                await indexDocuments();
+            }
+        }
+
+        function exportIndex() {
+            const data = JSON.stringify(documents, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `document_index_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        // Initialize
+        window.onload = async () => {
+            loadConfig();
+            
+            // Try to load existing index
+            const existing = await loadFromIndexedDB();
+            if (existing && existing.length > 0) {
+                documents = existing;
+                if (CLIENT_ID && API_KEY && isSignedIn) {
+                    document.getElementById('library-card').style.display = 'block';
+                    displayDocuments();
+                    updateStats();
+                }
+            }
+        };
+    </script>
+    <script src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+    <script>
+        function onApiLoad() {
+            gapi.load('client:auth2:picker', () => {
+                console.log('Google APIs loaded');
+            });
+        }
     </script>
 </body>
 </html>
