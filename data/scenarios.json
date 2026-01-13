@@ -1,0 +1,378 @@
+{
+  "scenario_library": {
+    "version": "1.0",
+    "baseline_reference": "2024_Q4_SYNTHETIC",
+    "scenarios": [
+      {
+        "id": "TECH_DECOUPLING_2025",
+        "name": "US-China Technology Decoupling",
+        "description": "Complete breakdown of technology trade between US and China, including semiconductors, AI systems, and critical software. Both actors impose maximum export controls. Third parties face pressure to choose sides.",
+        "created": "2025-01-13",
+        "probability_assessment": "not_applicable_stress_test",
+        
+        "overrides": {
+          "USA": {
+            "trade_integration_depth": {
+              "baseline": "high",
+              "override": "medium",
+              "justification": "Complete technology decoupling reduces overall trade integration despite maintained trade in non-tech sectors. US loses China as key export market for semiconductors and software."
+            },
+            "technology_production_capacity": {
+              "baseline": "very_high",
+              "override": "high",
+              "justification": "Loss of certain specialized inputs from China (rare earth elements, specialized components) creates short-term production bottlenecks in advanced manufacturing."
+            },
+            "alliance_dependency": {
+              "baseline": "low",
+              "override": "medium",
+              "justification": "Need for alternative semiconductor supply chains increases strategic value of alliances with Taiwan, South Korea, Netherlands, Japan. Cannot maintain tech dominance unilaterally."
+            }
+          },
+          
+          "China": {
+            "trade_integration_depth": {
+              "baseline": "very_high",
+              "override": "high",
+              "justification": "Technology decoupling reduces integration but China maintains strong trade ties in other sectors. Belt and Road countries partially offset US market loss."
+            },
+            "technology_production_capacity": {
+              "baseline": "high",
+              "override": "medium",
+              "justification": "Loss of US advanced chips (especially <7nm) and manufacturing equipment (ASML lithography) degrades leading-edge production capacity in short-to-medium term."
+            },
+            "energy_autonomy": {
+              "baseline": "low",
+              "override": "medium",
+              "justification": "Forced to accelerate diversification of energy suppliers away from potential US-aligned chokepoints. Increases domestic renewable investment."
+            },
+            "fiscal_resilience": {
+              "baseline": "high",
+              "override": "medium",
+              "justification": "Massive subsidies required for semiconductor self-sufficiency strain fiscal capacity. Estimated $150B+ in industrial policy spending."
+            }
+          },
+          
+          "Taiwan": {
+            "alliance_dependency": {
+              "baseline": "medium",
+              "override": "very_high",
+              "justification": "US-China decoupling forces Taiwan to choose sides more explicitly. Semiconductor leverage increases but so does security risk. Likely deepens US security guarantees."
+            },
+            "technology_production_capacity": {
+              "baseline": "very_high",
+              "override": "very_high",
+              "justification": "TSMC becomes even more strategically critical as both US and China vie for access. Massive investment from both sides. Reinforces position."
+            }
+          },
+          
+          "South_Korea": {
+            "alliance_dependency": {
+              "baseline": "very_high",
+              "override": "very_high",
+              "justification": "Economic ties to China (largest trading partner) conflict with security alliance with US. Faces intense pressure but ultimately aligns more closely with US due to North Korea threat."
+            },
+            "trade_integration_depth": {
+              "baseline": "very_high",
+              "override": "high",
+              "justification": "Forced to reduce some technology exports to China to comply with US restrictions. Samsung/SK Hynix face difficult choices on Chinese fab investments."
+            }
+          },
+          
+          "Germany": {
+            "trade_integration_depth": {
+              "baseline": "very_high",
+              "override": "high",
+              "justification": "Pressure to align with US tech restrictions conflicts with German industry's deep ties to China. Automotive and industrial equipment sectors particularly exposed."
+            },
+            "elite_cohesion": {
+              "baseline": "medium",
+              "override": "low",
+              "justification": "Decoupling forces splits between Atlanticist security community and export-oriented business community. Coalition tensions increase."
+            }
+          }
+        },
+        
+        "secondary_effects_to_explore": [
+          "Impact on global semiconductor supply chains",
+          "Third-party actor positioning (EU, India, ASEAN)",
+          "Technology standard fragmentation (5G, AI, quantum)",
+          "Acceleration of indigenous R&D programs",
+          "Potential for inadvertent escalation in other domains"
+        ],
+        
+        "tier_1_direct_effects": "Parameter overrides as specified",
+        "tier_2_expected_cascades": [
+          "Increased tech investment by both US and China",
+          "Supply chain reorientation pressure on all actors",
+          "Innovation ecosystem fragmentation",
+          "Heightened technology nationalism globally"
+        ],
+        "tier_3_strategic_realignments": [
+          "Formation of distinct technology blocs",
+          "Neutral countries pressured to choose sides",
+          "Increased risk of technology 'cold war' spillover into other domains"
+        ],
+        "tier_4_systemic_risks": [
+          "Positive feedback loop: Decoupling reduces trust, further decoupling follows",
+          "Bifurcation of global technology standards",
+          "Reduced aggregate global innovation due to ecosystem fragmentation"
+        ]
+      },
+      
+      {
+        "id": "ENERGY_TRANSITION_ACCELERATED_2025",
+        "name": "Accelerated Global Energy Transition",
+        "description": "Major breakthrough in battery storage technology combined with political consensus leads to rapid renewable energy adoption. Oil/gas demand peaks earlier than expected. Petrostates face revenue crisis.",
+        "created": "2025-01-13",
+        "probability_assessment": "not_applicable_stress_test",
+        
+        "overrides": {
+          "Russia": {
+            "fiscal_resilience": {
+              "baseline": "medium",
+              "override": "low",
+              "justification": "Hydrocarbon exports account for ~40% of federal budget. Rapid transition causes revenue crisis. Limited economic diversification leaves few alternatives."
+            },
+            "resource_leverage_potential": {
+              "baseline": "very_high",
+              "override": "medium",
+              "justification": "Energy weapon loses potency as Europe rapidly transitions to renewables and alternative suppliers. Strategic leverage over Europe diminishes."
+            },
+            "social_contract_strength": {
+              "baseline": "low",
+              "override": "very_low",
+              "justification": "Social contract based on resource rents collapses. Cannot maintain public spending without oil/gas revenues. Potential for instability."
+            }
+          },
+          
+          "USA": {
+            "energy_autonomy": {
+              "baseline": "high",
+              "override": "very_high",
+              "justification": "Renewable transition reduces oil import dependency to near-zero. Domestic manufacturing of batteries and panels increases energy security."
+            },
+            "resource_leverage_potential": {
+              "baseline": "high",
+              "override": "medium",
+              "justification": "Loses some energy export leverage as global gas demand falls. However, gains leverage in critical minerals for batteries (lithium, cobalt)."
+            }
+          },
+          
+          "China": {
+            "technology_production_capacity": {
+              "baseline": "high",
+              "override": "very_high",
+              "justification": "Already dominant in solar panel production (80% global share), battery manufacturing, and EV supply chains. Transition reinforces this advantage."
+            },
+            "energy_autonomy": {
+              "baseline": "low",
+              "override": "medium",
+              "justification": "Reduced dependence on imported oil/gas (China imports 70% of oil). Shift to domestically-produced renewable electricity increases autonomy."
+            },
+            "resource_leverage_potential": {
+              "baseline": "high",
+              "override": "very_high",
+              "justification": "Controls critical mineral processing (90% of rare earths, 70% of lithium processing). Becomes even more strategically important."
+            }
+          },
+          
+          "Germany": {
+            "energy_autonomy": {
+              "baseline": "very_low",
+              "override": "medium",
+              "justification": "Rapid renewable deployment plus reduced industrial energy needs decreases dependence on imported gas. No longer vulnerable to Russian energy coercion."
+            },
+            "fiscal_resilience": {
+              "baseline": "high",
+              "override": "medium",
+              "justification": "Massive subsidies required for industrial transition. Energy-intensive industries (chemicals, steel) require costly adaptation."
+            }
+          },
+          
+          "India": {
+            "energy_autonomy": {
+              "baseline": "low",
+              "override": "medium",
+              "justification": "Abundant solar resources and domestic manufacturing capacity enable faster transition. Reduces coal and oil imports significantly."
+            },
+            "fiscal_resilience": {
+              "baseline": "medium",
+              "override": "low",
+              "justification": "Cost of building renewable infrastructure strains government finances. Subsidies for energy access politically necessary but expensive."
+            }
+          }
+        },
+        
+        "secondary_effects_to_explore": [
+          "Petrostate political stability",
+          "Critical mineral supply chain competition",
+          "Geopolitical power shift from Middle East to mineral-rich regions",
+          "Electric vehicle adoption cascades",
+          "Stranded asset risks in fossil fuel sector"
+        ],
+        
+        "tier_1_direct_effects": "Parameter overrides as specified",
+        "tier_2_expected_cascades": [
+          "Petrostates seek economic diversification (may be too late)",
+          "Competition for lithium, cobalt, rare earth supplies intensifies",
+          "Manufacturing advantage shifts to countries with cheap renewable electricity"
+        ],
+        "tier_3_strategic_realignments": [
+          "Middle East loses strategic importance to West",
+          "Africa (cobalt, lithium) becomes new geopolitical focus",
+          "China's control of battery supply chains creates new dependencies"
+        ],
+        "tier_4_systemic_risks": [
+          "Petrostate collapse could trigger regional conflicts",
+          "New resource dependencies (critical minerals) could replicate old oil dependencies",
+          "Risk of 'green' trade wars over clean technology and critical minerals"
+        ]
+      },
+      
+      {
+        "id": "TAIWAN_CRISIS_2025",
+        "name": "Taiwan Strait Military Crisis",
+        "description": "Major military standoff in Taiwan Strait following Chinese military exercises that cross previous red lines. US deploys carrier groups. Both sides engage in cyber operations. Crisis does not escalate to full conflict but fundamentally reshapes regional security.",
+        "created": "2025-01-13",
+        "probability_assessment": "not_applicable_stress_test",
+        
+        "overrides": {
+          "China": {
+            "military_capability_tier": {
+              "baseline": "high",
+              "override": "high",
+              "justification": "Demonstrates improved amphibious and joint operations capability but also reveals gaps in ability to conduct opposed landing. Assessment remains HIGH but with increased confidence in limitations."
+            },
+            "trade_integration_depth": {
+              "baseline": "very_high",
+              "override": "medium",
+              "justification": "Emergency sanctions and counter-sanctions drastically reduce trade flows. Supply chains begin rapid reorientation even if crisis doesn't escalate."
+            },
+            "financial_system_centrality": {
+              "baseline": "medium",
+              "override": "low",
+              "justification": "Capital flight as investors fear further escalation. Yuan internationalization project suffers major setback. Foreign reserves under pressure from sanctions."
+            }
+          },
+          
+          "USA": {
+            "alliance_dependency": {
+              "baseline": "low",
+              "override": "medium",
+              "justification": "Crisis reveals that US cannot deter China alone in Western Pacific. Needs active Japanese, Australian, Philippine cooperation. Alliance becomes more important."
+            },
+            "military_capability_tier": {
+              "baseline": "very_high",
+              "override": "very_high",
+              "justification": "Successful crisis management demonstrates capability but also exposes logistics challenges in Western Pacific. Reinforces need for forward posture."
+            },
+            "fiscal_resilience": {
+              "baseline": "medium",
+              "override": "low",
+              "justification": "Emergency military spending and economic stabilization measures during crisis strain already-stretched fiscal position. Debt ceiling crisis possible."
+            }
+          },
+          
+          "Taiwan": {
+            "alliance_dependency": {
+              "baseline": "medium",
+              "override": "very_high",
+              "justification": "Crisis demonstrates absolute dependence on US military support. Without US carrier presence, would face invasion. No path to self-sufficient defense."
+            },
+            "social_contract_strength": {
+              "baseline": "high",
+              "override": "medium",
+              "justification": "Crisis reveals societal divisions over resistance vs. accommodation. Conscription debates intensify. Unity tested under pressure."
+            },
+            "trade_integration_depth": {
+              "baseline": "very_high",
+              "override": "medium",
+              "justification": "Shipping insurance costs spike. Some firms begin relocating supply chains from Taiwan. TSMC under pressure to build more offshore capacity."
+            }
+          },
+          
+          "Japan": {
+            "alliance_dependency": {
+              "baseline": "very_high",
+              "override": "very_high",
+              "justification": "Crisis cements already-strong US alliance. Japan provides critical bases and logistics support. 'Taiwan contingency is Japan contingency' becomes operational reality."
+            },
+            "military_capability_tier": {
+              "baseline": "medium",
+              "override": "high",
+              "justification": "Crisis accelerates Japanese rearmament and constitutional reinterpretation. Defense spending reaches 2% of GDP. Counterstrike capability development accelerates."
+            },
+            "institutional_stability": {
+              "baseline": "very_high",
+              "override": "high",
+              "justification": "Constitutional debates and rapid policy changes create some political turbulence but consensus on China threat holds."
+            }
+          },
+          
+          "South_Korea": {
+            "alliance_dependency": {
+              "baseline": "very_high",
+              "override": "very_high",
+              "justification": "Supports US but tries to avoid direct confrontation with China. Difficult balancing act. Ultimately sides with US due to North Korea factor."
+            },
+            "trade_integration_depth": {
+              "baseline": "very_high",
+              "override": "high",
+              "justification": "China (largest trading partner) imposes economic coercion to punish Korean support for US. Samsung, Hyundai face market access restrictions."
+            }
+          },
+          
+          "India": {
+            "alliance_dependency": {
+              "baseline": "medium",
+              "override": "low",
+              "justification": "Crisis demonstrates India can maintain strategic autonomy. Doesn't join sanctions but quietly supports US diplomatically. Sees opportunity to attract manufacturing."
+            },
+            "military_capability_tier": {
+              "baseline": "medium",
+              "override": "medium",
+              "justification": "Border tensions with China during crisis but India avoids escalation. Accelerates military modernization but focuses on Himalayan theater."
+            }
+          }
+        },
+        
+        "secondary_effects_to_explore": [
+          "Global semiconductor supply chain panic",
+          "ASEAN forced to choose sides",
+          "Cyber warfare escalation patterns",
+          "Economic decoupling acceleration",
+          "Nuclear crisis management lessons"
+        ],
+        
+        "tier_1_direct_effects": "Parameter overrides as specified",
+        "tier_2_expected_cascades": [
+          "Massive acceleration of semiconductor supply chain diversification",
+          "Regional arms race in Western Pacific",
+          "Economic sanctions architecture hardens US-China divide",
+          "Neutral countries (ASEAN, EU) face pressure to align"
+        ],
+        "tier_3_strategic_realignments": [
+          "Formation of explicit anti-China security coalition in Indo-Pacific",
+          "China doubles down on Belt and Road to create alternative sphere",
+          "Global economy fragments into distinct blocs"
+        ],
+        "tier_4_systemic_risks": [
+          "Hair-trigger alert status could lead to accidental escalation in future crises",
+          "Crisis management mechanisms prove inadequate (risk of miscalculation)",
+          "Economic interdependence no longer constrains security competition"
+        ]
+      }
+    ],
+    
+    "metadata": {
+      "total_scenarios": 3,
+      "scenario_types": [
+        "Technology/Economic",
+        "Energy/Environmental",
+        "Security/Military"
+      ],
+      "purpose": "Initial test scenarios for framework validation",
+      "note": "These are stress tests, not predictions. All scenarios are plausible but not necessarily probable."
+    }
+  }
+}
